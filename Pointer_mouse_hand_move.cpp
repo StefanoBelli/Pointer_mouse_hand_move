@@ -14,7 +14,7 @@
  void GetDesktopResolution(int& horizontal, int& vertical);
  void HideConsole();
  /** Global variables */
- String face_cascade_name ="C:/Users/denis/Desktop/openCV/openCVs/opencv-master/opencv-master/data/haarcascades/haarcascade_hand.xml";
+ String face_cascade_name ="C:/.../haarcascades/haarcascade_hand.xml";
  CascadeClassifier face_cascade;
  CascadeClassifier eyes_cascade;
  //string window_name = "";
