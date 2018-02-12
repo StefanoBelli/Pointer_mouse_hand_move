@@ -14,8 +14,8 @@
  void GetDesktopResolution(int& horizontal, int& vertical);
  void HideConsole();
  /** Global variables */
- String face_cascade_name ="C:/.../haarcascades/haarcascade_hand.xml";
- CascadeClassifier face_cascade;
+ String cascade_name ="C:/Users/denis/Desktop/openCV/openCVs/opencv-master/opencv-master/data/haarcascades/haarcascade_hand.xml";
+ CascadeClassifier cascade;
  CascadeClassifier eyes_cascade;
  //string window_name = "";
  RNG rng(12345);
@@ -25,13 +25,11 @@
  int main()
  {
 	 //initializing functions
-	 HideConsole();
-	 GetDesktopResolution(x, y);
-	 Mat frame;
+   HideConsole();
+   GetDesktopResolution(x, y);
+   Mat frame;
    //-- 1. Load the cascades
-   if( !face_cascade.load( face_cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
-  // if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
-
+   if( !cascade.load( cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
    VideoCapture cap;
    // open the default camera, use something different from 0 otherwise;
    // Check VideoCapture documentation.
@@ -67,7 +65,7 @@ void detectAndDisplay( Mat frame )
   equalizeHist( frame_gray, frame_gray );
 
   //-- Detect hands
-  face_cascade.detectMultiScale( frame_gray, hands, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(160, 160));
+  cascade.detectMultiScale( frame_gray, hands, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(160, 160));
 
   for( size_t i = 0; i < hands.size(); i++ )
   {
