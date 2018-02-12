@@ -4,6 +4,7 @@
 **DEPENDENCIES**
 
 OpenCV:https://github.com/opencv/opencv
+
 Haar cascade file of the hand: https://github.com/Balaje/OpenCV/blob/master/haarcascades/hand.xml
 
 **HOW TO USE**
