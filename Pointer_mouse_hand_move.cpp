@@ -46,7 +46,8 @@
 	   detectAndDisplay( frame ); 
        }else
 	   { 
-	   	printf(" --(!) No captured frame -- Break!"); break; 
+	   	printf(" --(!) No captured frame -- Break!"); 
+	        break; 
 	   }
 
        int c = waitKey(10);
