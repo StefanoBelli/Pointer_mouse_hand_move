@@ -17,7 +17,6 @@
  String cascade_name ="C:/Users/denis/Desktop/openCV/openCVs/opencv-master/opencv-master/data/haarcascades/haarcascade_hand.xml";
  CascadeClassifier cascade;
  //string window_name = "";
- RNG rng(12345);
  int x;
  int y;
  /** @function main */
