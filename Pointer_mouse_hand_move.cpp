@@ -29,28 +29,33 @@
    GetDesktopResolution(x, y);
    Mat frame;
    //-- 1. Load the cascades
-   if( !cascade.load( cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
+   if( !cascade.load( cascade_name ) )
+   { 
+        printf("--(!)Error loading\n"); return -1; 
+   }
    VideoCapture cap;
    // open the default camera, use something different from 0 otherwise;
    // Check VideoCapture documentation.
-   if (!cap.open(0))
-	   return 0;
+   if ( !cap.open(0) )
+   {
+	 return 0;
+   }
      while( cap.read(frame) )
      {
    //-- 3. Apply the classifier to the frame
        if( !frame.empty() )
        { 
-		   detectAndDisplay( frame ); 
-	   }else
-			{ 
-			   printf(" --(!) No captured frame -- Break!"); break; 
-			}
+	   detectAndDisplay( frame ); 
+       }else
+	   { 
+	   	printf(" --(!) No captured frame -- Break!"); break; 
+	   }
 
        int c = waitKey(10);
        if( (char)c == 'c' ) 
-	   {
-		   break; 
-	   }
+       {
+	    break; 
+       }
       }
    return 0;
  }
