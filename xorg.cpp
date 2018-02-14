@@ -29,7 +29,7 @@ void DetectAndDisplay(Display* xorgDisplay,
   cascade.detectMultiScale( frame_gray, hands, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Cv_Size(100, 100), Cv_Size(160, 160));
 
   for( size_t i = 0; i < hands.size(); i++ ) {
-	 XWarpPointer(xorgDisplay,None,None,0,0,0,0,
+	 XWarpPointer(xorgDisplay,None,XRootWindow(xorgDisplay,0),0,0,0,0,
 	 		 w-(w/frame.cols+2) * hands[i].x, 
 	 		 (h/(frame.rows-220)) * hands[i].y);
 	 XSync(xorgDisplay,False);
