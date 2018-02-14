@@ -30,8 +30,8 @@ void DetectAndDisplay(Display* xorgDisplay,
 
   for( size_t i = 0; i < hands.size(); i++ ) {
 	 XWarpPointer(xorgDisplay,None,None,0,0,0,0,
-	 		 w-(w/frame.cols+2) * hands[0].x, 
-	 		 (h/(frame.rows-220)) * hands[0].y);
+	 		 w-(w/frame.cols+2) * hands[i].x, 
+	 		 (h/(frame.rows-220)) * hands[i].y);
 	 XSync(xorgDisplay,False);
   }
 }
