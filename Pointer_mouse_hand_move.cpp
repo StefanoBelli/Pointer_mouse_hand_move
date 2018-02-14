@@ -39,7 +39,7 @@ int main()
       }
       while( cap.read(frame) )
       {
-      //-- 3. Apply the classifier to the frame
+            //-- 3. Apply the classifier to the frame
             if( !frame.empty() )
             {
                   detectAndDisplay( frame );
