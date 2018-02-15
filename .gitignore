@@ -1,0 +1,6 @@
+handpointer
+*.o
+a.out
+*.exe
+[Bb]in/
+[Dd]ebug/
