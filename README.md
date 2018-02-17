@@ -1,5 +1,5 @@
 # Pointer_mouse_hand_move
-**How to move the mouse pointer with the hand in windows**
+**How to move the mouse pointer with the hand in Windows and Linux**
 
 **DEPENDENCIES**
 
