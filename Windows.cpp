@@ -89,10 +89,10 @@ void GetDesktopResolution(int& horizontal, int& vertical)
        // (horizontal, vertical)
        horizontal = desktop.right;
        vertical = desktop.bottom;
-}
-
+}      
+       
 /** @function HideConsole */
 void HideConsole()
-{
-      ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+{      
+       ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 }
