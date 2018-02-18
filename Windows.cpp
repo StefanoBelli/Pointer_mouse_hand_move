@@ -13,7 +13,7 @@ void detectAndDisplay( Mat frame );
 void GetDesktopResolution(int& horizontal, int& vertical);
 void HideConsole();
 /** Global variables */
-String cascade_name ="C:/Users/denis/Desktop/openCV/openCVs/opencv-master/opencv-master/data/haarcascades/haarcascade_hand.xml";
+String cascade_name ="C:/.../data/haarcascades/haarcascade_hand.xml";
 CascadeClassifier cascade;
 //string window_name = "";
 int x;
