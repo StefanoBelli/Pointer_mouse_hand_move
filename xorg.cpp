@@ -38,7 +38,7 @@ static always_inline void DetectAndDisplay(Display* xorgDisplay,
 		Cv_CascadeClassifier& palmCascade,
 		int const& w,
 		int const& h) {
-	
+
 	std::vector<Cv_Rect> handsPalm;
   	std::vector<Cv_Rect> handsFist;
   	Cv_Mat frame_gray;
@@ -54,7 +54,7 @@ static always_inline void DetectAndDisplay(Display* xorgDisplay,
   			0|CV_HAAR_SCALE_IMAGE, 
   			Cv_Size(100, 100), 
   			Cv_Size(160, 160));
-  	
+
   	palmCascade.detectMultiScale( 
   			frame_gray, 
   			handsPalm, 
@@ -73,21 +73,23 @@ static always_inline void DetectAndDisplay(Display* xorgDisplay,
 		XTestFakeButtonEvent(xorgDisplay, 1, False, CurrentTime);
 		XFlush(xorgDisplay);
 		std::cout << "\tpalm: \033[1mdetected\033[0m!\r" << std::flush;
-  	}
-  	
-  	for(auto const& fist : handsFist) {
-	 	xw = w - ((w / frame.cols + 2) * fist.x);
-	 	yh = (h / (frame.rows-220)) * fist.y;
+  	} else {
 
-	 	XWarpPointer(xorgDisplay,None,
-				rootWindow,
-				0,0,0,0,
-				xw,yh);
+  		for(auto const& fist : handsFist) {
+	 		xw = w - ((w / frame.cols + 2) * fist.x);
+	 		yh = (h / (frame.rows-220)) * fist.y;
 
-	 	XFlush(xorgDisplay);
-	 	std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m\r" << std::flush;
+	 		XWarpPointer(xorgDisplay,None,
+					rootWindow,
+					0,0,0,0,
+					xw,yh);
+
+	 		XFlush(xorgDisplay);
+	 		std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m\r" << std::flush;
+  		}
+  		
   	}
-  	
+
 	std::this_thread::sleep_for(std::chrono::nanoseconds(500));
 }
 
@@ -129,7 +131,7 @@ int main()
 	 	std::cerr << "Unable to load HAAR cascade: " << haarCascadePalm << std::endl;
 	 	return 1;
   	}
-  	
+
   	Cv_VideoCapture source;
   	if(!source.open(0)) {
 	 	std::cerr << "Unable to open source 0" << std::endl;
@@ -157,7 +159,7 @@ int main()
   	std::cout << std::endl;
 
   	std::cout << "received signal: " << receivedSignal << "\nclosing X server connection..." << std::endl;
-  	
+
   	XSync(disp,True);
   	XCloseDisplay(disp);
 
