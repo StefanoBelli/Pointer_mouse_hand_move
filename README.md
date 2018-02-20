@@ -13,4 +13,4 @@ Haar cascade file of the hand open: https://github.com/trane293/Palm-Fist-Gestur
 
 In Pointer_mouse_hand_move.cpp change the line 17 with the absolute directory of haar cascade file. (idem for 19 line)
 First you need to have a webcam, through it we will move the mouse.
-Put your hand(closed) in front of the webcam and move it, the mouse will move, open it to left muouse click.
+Put your hand(closed) in front of the webcam and move it, the mouse will move, open it to left mouse click.
