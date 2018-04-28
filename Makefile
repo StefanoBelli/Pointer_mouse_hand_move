@@ -7,10 +7,13 @@ CXXFLAGS = -lX11 \
 		   -lopencv_imgproc \
 		   -lopencv_videoio \
 		   -lopencv_objdetect \
+		   -lopencv_highgui \
 		   -std=c++11 \
 		   -O2 \
 		   -Wall \
-		   -pedantic 
+		   -pedantic \
+		   $(shell pkg-config --libs gtk+-2.0)
+ 
 EXECUTABLE = handpointer
 XORG_OBJ = xorg.o
 PREFIX = /usr
@@ -18,7 +21,7 @@ PREFIX = /usr
 OBJS = $(XORG_OBJ)
 
 all: $(OBJS)
-	$(CXX) $(OBJS) $(CXXFLAGS) -o $(EXECUTABLE)
+	$(CXX) $(OBJS) $(CXXFLAGS) -o $(EXECUTABLE) 
 
 clean:
 	rm -rf $(XORG_OBJ)

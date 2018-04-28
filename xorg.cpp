@@ -12,8 +12,6 @@
 
 #include <signal.h>
 
-#define always_inline __attribute__((__always_inline__))
-
 using Cv_VideoCapture = cv::VideoCapture;
 using Cv_Mat = cv::Mat;
 using Cv_Rect = cv::Rect;
@@ -22,6 +20,8 @@ using Cv_Size = cv::Size;
 
 static int receivedSignal = 0;
 static volatile sig_atomic_t run = true;
+static std::vector<Cv_Rect> handsFist;
+static std::vector<Cv_Rect> handsPalm;
 
 constexpr char haarCascadeFist[] = "res/haarcascade_fist.xml";
 constexpr char haarCascadePalm[] = "res/haarcascade_palm.xml";
@@ -31,7 +31,7 @@ static void set_runflag_zero(int sig) {
   	receivedSignal = sig;
 }
 
-static always_inline void DetectAndDisplay(Display* xorgDisplay,
+static void DetectAndDisplay(Display* xorgDisplay,
 		Window const& rootWindow,
 		Cv_Mat const& frame,
 		Cv_CascadeClassifier& fistCascade,
@@ -39,9 +39,10 @@ static always_inline void DetectAndDisplay(Display* xorgDisplay,
 		int const& w,
 		int const& h) {
 
-	std::vector<Cv_Rect> handsPalm;
-  	std::vector<Cv_Rect> handsFist;
-  	Cv_Mat frame_gray;
+	handsPalm.clear();
+	handsFist.clear();
+	
+ 	Cv_Mat frame_gray;
 
   	cvtColor( frame, frame_gray, CV_BGR2GRAY );
   	equalizeHist( frame_gray, frame_gray );
@@ -67,30 +68,25 @@ static always_inline void DetectAndDisplay(Display* xorgDisplay,
 
   	int xw;
   	int yh;
+  	
+  	if(handsFist.size()) {
+	    xw = w - ((w / frame.cols + 2) * handsFist[0].x);
+ 	    yh = (h / (frame.rows-220)) * handsFist[0].y;
+ 	    XWarpPointer(xorgDisplay,None,
+	 	        rootWindow,
+				0,0,0,0,
+				xw,yh);
 
-  	if(handsPalm.size() == 1) {
+	 	std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m\r" << std::flush;
+  	} else if(handsPalm.size() == 1) {
 		XTestFakeButtonEvent(xorgDisplay, 1, True, CurrentTime);
 		XTestFakeButtonEvent(xorgDisplay, 1, False, CurrentTime);
-		XFlush(xorgDisplay);
 		std::cout << "\tpalm: \033[1mdetected\033[0m!\r" << std::flush;
-  	} else {
+	}
 
-  		for(auto const& fist : handsFist) {
-	 		xw = w - ((w / frame.cols + 2) * fist.x);
-	 		yh = (h / (frame.rows-220)) * fist.y;
-
-	 		XWarpPointer(xorgDisplay,None,
-					rootWindow,
-					0,0,0,0,
-					xw,yh);
-
-	 		XFlush(xorgDisplay);
-	 		std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m\r" << std::flush;
-  		}
-  		
-  	}
-
-	std::this_thread::sleep_for(std::chrono::nanoseconds(500));
+  	XFlush(xorgDisplay);
+    cv::imshow("HandMovement", frame_gray);
+    cv::waitKey(10);
 }
 
 void GetScreenSize(Display* xorgDisplay,
@@ -107,6 +103,9 @@ void GetScreenSize(Display* xorgDisplay,
 int main()
 {
   	std::cout << "setting up..." << std::endl;
+
+  	handsFist.reserve(3);
+  	handsPalm.reserve(3);
 
   	Display* disp = XOpenDisplay(NULL);
   	if(disp == nullptr) {
@@ -143,6 +142,8 @@ int main()
 
   	Window rootWin = XRootWindow(disp,0);
   	Cv_Mat frame;
+
+    cv::namedWindow("HandMovement");
 
   	std::cout << "\033[7mcapturing...\033[0m\ncoords:\n"
 		<< "\tx: \033[1m0\033[0m, y: \033[1m0\033[0m\r" << std::flush;
