@@ -12,11 +12,13 @@ CXXFLAGS = -I/usr/include/opencv4 \
 		   -std=c++11 \
 		   -O2 \
 		   -Wall \
-		   -pedantic \
-		   $(shell pkg-config --libs gtk+-2.0)
+		   -Wextra \
+		   -Wshadow \
+		   -W \
+		   -pedantic
  
 EXECUTABLE = handpointer
-XORG_OBJ = xorg.o
+XORG_OBJ = xorg.new.o
 PREFIX = /usr
 
 OBJS = $(XORG_OBJ)
