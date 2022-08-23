@@ -2,20 +2,17 @@
 
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
 #include <opencv2/videoio.hpp>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/XTest.h>
 
 #include <signal.h>
 
+constexpr char HAAR_CASCADE_FIST_PATH[] = "res/haarcascade_fist.xml";
+
+
 static int receivedSignal = 0;
 static volatile sig_atomic_t run = true;
-static std::vector<cv::Rect> handsFist;
-
-constexpr char haarCascadeFist[] = "res/haarcascade_fist.xml";
 
 static void set_runflag_zero(int sig) {
   	run = false;
@@ -27,8 +24,12 @@ static void set_runflag_zero(int sig) {
 //
 int main()
 {
+  	signal(SIGINT, SIG_IGN);
+  	signal(SIGTERM, SIG_IGN);
+
   	std::cout << "setting up..." << std::endl;
 
+	std::vector<cv::Rect> handsFist;
 	handsFist.reserve(1);
 
   	Display* disp = XOpenDisplay(NULL);
@@ -44,8 +45,8 @@ int main()
   	std::cout << "screen:\n\twidth: " << scrWidth << "\n\theight: " << scrHeight << std::endl;
 
   	cv::CascadeClassifier casFist;
-  	if(!casFist.load(haarCascadeFist)) {
-	 	std::cerr << "Unable to load HAAR cascade: " << haarCascadeFist << std::endl;
+  	if(!casFist.load(HAAR_CASCADE_FIST_PATH)) {
+	 	std::cerr << "Unable to load HAAR cascade: " << HAAR_CASCADE_FIST_PATH << std::endl;
 	 	return 1;
   	}
 
@@ -70,11 +71,6 @@ int main()
 	cv::Size sq160(160, 160);
 
   	while(source.read(frame) && run) {
-	 	if(frame.empty()) {
-			std::cerr << "No frame captured, exiting..." << std::endl;
-			return 1;
-	 	}
-
 		cv::Mat gray_frame;
 
 		cv::cvtColor(frame, gray_frame, cv::COLOR_BGR2GRAY);
@@ -88,20 +84,13 @@ int main()
   				0|cv::CASCADE_SCALE_IMAGE, 
   				sq100, sq160);
 
-  		int xw;
-  		int yh;
+  		int xw = scrWidth - ((scrHeight / frame.cols + 2) * handsFist[0].x);
+  		int yh = (scrHeight / (frame.rows - 220)) * handsFist[0].y;
 
-  		xw = scrWidth - ((scrHeight / frame.cols + 2) * handsFist[0].x);
-  		yh = (scrHeight / (frame.rows-220)) * handsFist[0].y;
-  		
- 		XWarpPointer(disp,None,
-	 	    	rootWin,
-				0,0,0,0,
-				xw, yh);
-		
-		XFlush(disp);
+  		XWarpPointer(disp, None, rootWin, 0, 0, 0, 0, xw, yh);
+  		XFlush(disp);
 #ifdef COORDS
-		std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m\r" << std::flush;
+		std::cout << "\tx: \033[1m" << xw << "\033[0m, y: \033[1m" << yh << "\033[0m            \r" << std::flush;
 #endif
   	}
 

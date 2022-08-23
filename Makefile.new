@@ -15,7 +15,8 @@ CXXFLAGS = -I/usr/include/opencv4 \
 		   -Wextra \
 		   -Wshadow \
 		   -W \
-		   -pedantic
+		   -pedantic \
+		   -DCOORDS
  
 EXECUTABLE = handpointer
 XORG_OBJ = xorg.new.o
@@ -24,7 +25,7 @@ PREFIX = /usr
 OBJS = $(XORG_OBJ)
 
 all: $(OBJS)
-	$(CXX) $(OBJS) $(CXXFLAGS) -o $(EXECUTABLE) 
+	$(CXX) $(OBJS) $(CXXFLAGS) -o $(EXECUTABLE)
 
 clean:
 	rm -rf $(XORG_OBJ)
